@@ -1,24 +1,28 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ArrowRight, Shield, Truck, RotateCcw, Award, Star, ChevronRight } from 'lucide-react';
+import { ArrowRight, Shield, Truck, RotateCcw, Award, Star, ChevronRight, Zap, Users, Clock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
-import { sampleProducts } from '../data/products';
+import { sampleProducts, blogPosts } from '../data/products';
 
 const HomePage: React.FC = () => {
   const { t, i18n } = useTranslation();
 
-  const featuredProducts = sampleProducts.slice(0, 4);
-  const newProducts = sampleProducts.slice(0, 3);
+  const featuredProducts = sampleProducts.filter(p => p.isFeatured).slice(0, 4);
+  const newProducts = sampleProducts.filter(p => p.isNew).slice(0, 4);
+  const onSaleProducts = sampleProducts.filter(p => p.discountPrice).slice(0, 4);
+  const recentBlogPosts = blogPosts.slice(0, 3);
 
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-orange-50 to-amber-50 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 py-16 lg:py-24">
+      <section className="relative bg-gradient-to-br from-orange-50 via-amber-50 to-orange-100 overflow-hidden">
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23f97316" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="4"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-30"></div>
+        
+        <div className="max-w-7xl mx-auto px-4 py-16 lg:py-24 relative">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
-              <div className="space-y-4">
+              <div className="space-y-6">
                 <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 leading-tight">
                   {t('hero.title')}
                 </h1>
@@ -30,14 +34,14 @@ const HomePage: React.FC = () => {
               <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
                 <Link
                   to="/furniture"
-                  className="bg-orange-600 text-white px-8 py-4 rounded-lg hover:bg-orange-700 transition-colors font-semibold text-lg flex items-center justify-center space-x-2 group"
+                  className="bg-orange-600 text-white px-8 py-4 rounded-lg hover:bg-orange-700 transition-all duration-300 font-semibold text-lg flex items-center justify-center space-x-2 group shadow-lg hover:shadow-xl transform hover:-translate-y-1"
                 >
                   <span>{t('cta.discover')}</span>
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
                 <Link
                   to="/custom-made"
-                  className="border border-orange-600 text-orange-600 px-8 py-4 rounded-lg hover:bg-orange-600 hover:text-white transition-colors font-semibold text-lg text-center"
+                  className="border-2 border-orange-600 text-orange-600 px-8 py-4 rounded-lg hover:bg-orange-600 hover:text-white transition-all duration-300 font-semibold text-lg text-center shadow-lg hover:shadow-xl transform hover:-translate-y-1"
                 >
                   {t('cta.getQuote')}
                 </Link>
@@ -45,19 +49,19 @@ const HomePage: React.FC = () => {
 
               {/* Trust Badges */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 pt-8">
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 bg-white/70 backdrop-blur-sm rounded-lg p-3">
                   <Shield className="w-6 h-6 text-orange-600" />
                   <span className="text-sm font-medium text-gray-700">{t('trust.warranty12')}</span>
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 bg-white/70 backdrop-blur-sm rounded-lg p-3">
                   <RotateCcw className="w-6 h-6 text-orange-600" />
                   <span className="text-sm font-medium text-gray-700">{t('trust.return30')}</span>
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 bg-white/70 backdrop-blur-sm rounded-lg p-3">
                   <Truck className="w-6 h-6 text-orange-600" />
                   <span className="text-sm font-medium text-gray-700">{t('trust.freeShipping')}</span>
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 bg-white/70 backdrop-blur-sm rounded-lg p-3">
                   <Award className="w-6 h-6 text-orange-600" />
                   <span className="text-sm font-medium text-gray-700">{t('trust.securePayment')}</span>
                 </div>
@@ -97,14 +101,14 @@ const HomePage: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
             <Link 
               to="/furniture"
-              className="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+              className="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
             >
               <img
                 src="https://images.pexels.com/photos/1350789/pexels-photo-1350789.jpeg"
                 alt="Furniture Collection"
-                className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
               <div className="absolute bottom-6 left-6 text-white">
                 <h3 className="text-xl font-bold mb-2">{t('nav.furniture')}</h3>
                 <p className="text-sm opacity-90 mb-3">
@@ -122,14 +126,14 @@ const HomePage: React.FC = () => {
 
             <Link 
               to="/kitchen"
-              className="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+              className="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
             >
               <img
                 src="https://images.pexels.com/photos/2724749/pexels-photo-2724749.jpeg"
                 alt="Kitchen Collection"
-                className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
               <div className="absolute bottom-6 left-6 text-white">
                 <h3 className="text-xl font-bold mb-2">{t('nav.kitchen')}</h3>
                 <p className="text-sm opacity-90 mb-3">
@@ -147,14 +151,14 @@ const HomePage: React.FC = () => {
 
             <Link 
               to="/custom-made"
-              className="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+              className="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
             >
               <img
                 src="https://images.pexels.com/photos/1648776/pexels-photo-1648776.jpeg"
                 alt="Custom Made Collection"
-                className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
               <div className="absolute bottom-6 left-6 text-white">
                 <h3 className="text-xl font-bold mb-2">{t('nav.customMade')}</h3>
                 <p className="text-sm opacity-90 mb-3">
@@ -174,59 +178,97 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* Featured Products */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between mb-12">
-            <div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-                {i18n.language === 'tr' ? 'Öne Çıkan Ürünler' : 'Featured Products'}
-              </h2>
-              <p className="text-xl text-gray-600">
-                {i18n.language === 'tr' 
-                  ? 'En çok tercih edilen ürünlerimiz' 
-                  : 'Our most preferred products'
-                }
-              </p>
+      {featuredProducts.length > 0 && (
+        <section className="py-16 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="flex items-center justify-between mb-12">
+              <div>
+                <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+                  {i18n.language === 'tr' ? 'Öne Çıkan Ürünler' : 'Featured Products'}
+                </h2>
+                <p className="text-xl text-gray-600">
+                  {i18n.language === 'tr' 
+                    ? 'En çok tercih edilen ürünlerimiz' 
+                    : 'Our most preferred products'
+                  }
+                </p>
+              </div>
+              <Link
+                to="/products"
+                className="text-orange-600 font-semibold flex items-center space-x-1 hover:text-orange-700 transition-colors"
+              >
+                <span>{t('cta.viewAll')}</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
             </div>
-            <Link
-              to="/products"
-              className="text-orange-600 font-semibold flex items-center space-x-1 hover:text-orange-700 transition-colors"
-            >
-              <span>{t('cta.viewAll')}</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {featuredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              {featuredProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Campaign Banner */}
+      <section className="py-16 bg-gradient-to-r from-orange-600 to-orange-700 text-white">
+        <div className="max-w-7xl mx-auto px-4 text-center">
+          <div className="max-w-3xl mx-auto">
+            <h2 className="text-3xl lg:text-4xl font-bold mb-4">
+              {i18n.language === 'tr' 
+                ? 'Kış Kampanyası Başladı!' 
+                : 'Winter Campaign Started!'
+              }
+            </h2>
+            <p className="text-xl mb-8 opacity-90">
+              {i18n.language === 'tr' 
+                ? 'Seçili mobilya ve mutfak ürünlerinde %30\'a varan indirim. Ücretsiz kargo ve montaj hizmeti dahil!'
+                : 'Up to 30% discount on selected furniture and kitchen products. Free shipping and installation service included!'
+              }
+            </p>
+            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center">
+              <Link
+                to="/sale"
+                className="bg-white text-orange-600 px-8 py-4 rounded-lg hover:bg-gray-100 transition-colors font-semibold text-lg"
+              >
+                {i18n.language === 'tr' ? 'İndirimli Ürünler' : 'Sale Products'}
+              </Link>
+              <Link
+                to="/custom-made"
+                className="border-2 border-white text-white px-8 py-4 rounded-lg hover:bg-white hover:text-orange-600 transition-colors font-semibold text-lg"
+              >
+                {t('cta.getQuote')}
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
       {/* New Arrivals */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-              {i18n.language === 'tr' ? 'Yeni Gelenler' : 'New Arrivals'}
-            </h2>
-            <p className="text-xl text-gray-600">
-              {i18n.language === 'tr' 
-                ? 'Son eklenen ürünlerimizi inceleyin' 
-                : 'Check out our latest added products'
-              }
-            </p>
-          </div>
+      {newProducts.length > 0 && (
+        <section className="py-16 bg-white">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+                {i18n.language === 'tr' ? 'Yeni Gelenler' : 'New Arrivals'}
+              </h2>
+              <p className="text-xl text-gray-600">
+                {i18n.language === 'tr' 
+                  ? 'Son eklenen ürünlerimizi inceleyin' 
+                  : 'Check out our latest added products'
+                }
+              </p>
+            </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {newProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              {newProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Brand Story */}
       <section className="py-16 bg-gradient-to-r from-gray-900 to-gray-800 text-white">
@@ -236,7 +278,7 @@ const HomePage: React.FC = () => {
               <img
                 src="https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg"
                 alt="Our Workshop"
-                className="w-full h-96 object-cover rounded-xl"
+                className="w-full h-96 object-cover rounded-xl shadow-2xl"
               />
             </div>
             <div className="space-y-6">
@@ -245,8 +287,8 @@ const HomePage: React.FC = () => {
               </h2>
               <p className="text-lg text-gray-300 leading-relaxed">
                 {i18n.language === 'tr' 
-                  ? '20 yıllık deneyimimizle, kaliteli mobilya ve mutfak ürünleri üretiyoruz. Her ürünümüzde ustalık ve özen bir aradadır.'
-                  : 'With 20 years of experience, we produce quality furniture and kitchen products. Craftsmanship and care come together in each of our products.'
+                  ? '20 yıllık deneyimimizle, kaliteli mobilya ve mutfak ürünleri üretiyoruz. Her ürünümüzde ustalık ve özen bir aradadır. Müşteri memnuniyeti odaklı yaklaşımımızla, evinizi sıcak bir yuvaya dönüştürmenize yardımcı oluyoruz.'
+                  : 'With 20 years of experience, we produce quality furniture and kitchen products. Craftsmanship and care come together in each of our products. With our customer satisfaction-oriented approach, we help you transform your house into a warm home.'
                 }
               </p>
               <div className="grid grid-cols-3 gap-6">
@@ -280,8 +322,87 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* Testimonials */}
+      {/* Why Choose Us */}
       <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+              {i18n.language === 'tr' ? 'Neden K Mobilya?' : 'Why K Mobilya?'}
+            </h2>
+            <p className="text-xl text-gray-600">
+              {i18n.language === 'tr' 
+                ? 'Bizi tercih etmeniz için sebepler' 
+                : 'Reasons to choose us'
+              }
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="text-center p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Zap className="w-8 h-8 text-orange-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                {i18n.language === 'tr' ? 'Hızlı Teslimat' : 'Fast Delivery'}
+              </h3>
+              <p className="text-gray-600 text-sm">
+                {i18n.language === 'tr' 
+                  ? '7 gün içinde kapınızda, ücretsiz montaj dahil'
+                  : 'At your door within 7 days, free installation included'
+                }
+              </p>
+            </div>
+
+            <div className="text-center p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Shield className="w-8 h-8 text-orange-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                {i18n.language === 'tr' ? 'Kalite Garantisi' : 'Quality Guarantee'}
+              </h3>
+              <p className="text-gray-600 text-sm">
+                {i18n.language === 'tr' 
+                  ? '12 ay garanti ve kaliteli malzeme kullanımı'
+                  : '12 month warranty and quality material usage'
+                }
+              </p>
+            </div>
+
+            <div className="text-center p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Users className="w-8 h-8 text-orange-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                {i18n.language === 'tr' ? 'Uzman Ekip' : 'Expert Team'}
+              </h3>
+              <p className="text-gray-600 text-sm">
+                {i18n.language === 'tr' 
+                  ? '20 yıllık deneyimli tasarım ve üretim ekibi'
+                  : '20 years experienced design and production team'
+                }
+              </p>
+            </div>
+
+            <div className="text-center p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Clock className="w-8 h-8 text-orange-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                {i18n.language === 'tr' ? '7/24 Destek' : '24/7 Support'}
+              </h3>
+              <p className="text-gray-600 text-sm">
+                {i18n.language === 'tr' 
+                  ? 'Her zaman yanınızda müşteri hizmetleri'
+                  : 'Customer service always with you'
+                }
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
@@ -296,26 +417,48 @@ const HomePage: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[1, 2, 3].map((index) => (
-              <div key={index} className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+            {[
+              {
+                name: 'Ayşe Yılmaz',
+                city: 'İstanbul',
+                rating: 5,
+                comment: i18n.language === 'tr' 
+                  ? 'Luna kanepe aldık, hem çok şık hem de çok rahat. Montaj ekibi de çok profesyoneldi. Kesinlikle tavsiye ederim.'
+                  : 'We bought the Luna sofa, it is both very stylish and very comfortable. The installation team was also very professional. I definitely recommend it.'
+              },
+              {
+                name: 'Mehmet Kaya',
+                city: 'Ankara',
+                rating: 5,
+                comment: i18n.language === 'tr' 
+                  ? 'Mutfak dolabımızı özel ölçü yaptırdık. Harika bir işçilik ve kaliteli malzeme. Çok memnun kaldık.'
+                  : 'We had our kitchen cabinet made to custom size. Great workmanship and quality materials. We are very satisfied.'
+              },
+              {
+                name: 'Fatma Demir',
+                city: 'İzmir',
+                rating: 5,
+                comment: i18n.language === 'tr' 
+                  ? 'ChefPro tencere setini aldık. Kalitesi gerçekten çok iyi, her yemek mükemmel oluyor. Teşekkürler K Mobilya.'
+                  : 'We bought the ChefPro cookware set. The quality is really very good, every meal turns out perfect. Thank you K Mobilya.'
+              }
+            ].map((review, index) => (
+              <div key={index} className="bg-gray-50 p-6 rounded-xl hover:shadow-md transition-shadow">
                 <div className="flex items-center mb-4">
-                  {[...Array(5)].map((_, i) => (
+                  {[...Array(review.rating)].map((_, i) => (
                     <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
                   ))}
                 </div>
-                <p className="text-gray-700 mb-4 italic">
-                  {i18n.language === 'tr' 
-                    ? '"Harika kalite ve mükemmel hizmet. Evimiz çok daha sıcak oldu."'
-                    : '"Great quality and excellent service. Our home has become much warmer."'
-                  }
-                </p>
+                <p className="text-gray-700 mb-4 italic">"{review.comment}"</p>
                 <div className="flex items-center">
-                  <div className="w-10 h-10 bg-gray-300 rounded-full mr-3"></div>
+                  <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center mr-3">
+                    <span className="text-orange-600 font-semibold text-sm">
+                      {review.name.split(' ').map(n => n[0]).join('')}
+                    </span>
+                  </div>
                   <div>
-                    <div className="font-semibold text-gray-900">
-                      {i18n.language === 'tr' ? 'Müşteri' : 'Customer'} {index}
-                    </div>
-                    <div className="text-sm text-gray-500">İstanbul</div>
+                    <div className="font-semibold text-gray-900">{review.name}</div>
+                    <div className="text-sm text-gray-500">{review.city}</div>
                   </div>
                 </div>
               </div>
@@ -325,61 +468,65 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* Blog Preview */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between mb-12">
-            <div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-                {t('blog.title')}
-              </h2>
-              <p className="text-xl text-gray-600">
-                {i18n.language === 'tr' 
-                  ? 'Dekorasyon ve mutfak rehberlerimiz' 
-                  : 'Our decoration and kitchen guides'
-                }
-              </p>
-            </div>
-            <Link
-              to="/blog"
-              className="text-orange-600 font-semibold flex items-center space-x-1 hover:text-orange-700 transition-colors"
-            >
-              <span>{t('cta.viewAll')}</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[1, 2, 3].map((index) => (
-              <Link key={index} to={`/blog/${index}`} className="group">
-                <div className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-shadow overflow-hidden">
-                  <img
-                    src={`https://images.pexels.com/photos/${1571460 + index}/pexels-photo-${1571460 + index}.jpeg`}
-                    alt={`Blog ${index}`}
-                    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="p-6">
-                    <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-orange-600 transition-colors">
-                      {i18n.language === 'tr' 
-                        ? `Dekorasyon İpuçları ${index}`
-                        : `Decoration Tips ${index}`
-                      }
-                    </h3>
-                    <p className="text-gray-600 text-sm mb-4">
-                      {i18n.language === 'tr' 
-                        ? 'Evinizi daha güzel hale getirmenin yolları...'
-                        : 'Ways to make your home more beautiful...'
-                      }
-                    </p>
-                    <span className="text-orange-600 text-sm font-medium">
-                      {t('blog.readMore')} →
-                    </span>
-                  </div>
-                </div>
+      {recentBlogPosts.length > 0 && (
+        <section className="py-16 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="flex items-center justify-between mb-12">
+              <div>
+                <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+                  {t('blog.title')}
+                </h2>
+                <p className="text-xl text-gray-600">
+                  {i18n.language === 'tr' 
+                    ? 'Dekorasyon ve mutfak rehberlerimiz' 
+                    : 'Our decoration and kitchen guides'
+                  }
+                </p>
+              </div>
+              <Link
+                to="/blog"
+                className="text-orange-600 font-semibold flex items-center space-x-1 hover:text-orange-700 transition-colors"
+              >
+                <span>{t('cta.viewAll')}</span>
+                <ArrowRight className="w-4 h-4" />
               </Link>
-            ))}
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {recentBlogPosts.map((post) => (
+                <Link key={post.id} to={`/blog/${post.slugTR}`} className="group">
+                  <div className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden transform hover:-translate-y-1">
+                    <img
+                      src={post.featuredImage}
+                      alt={i18n.language === 'tr' ? post.titleTR : post.titleEN}
+                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="p-6">
+                      <div className="flex items-center space-x-2 mb-3">
+                        <span className="text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded-full font-medium">
+                          {post.category === 'decoration' ? t('blog.decorationGuides') : t('blog.kitchenGuides')}
+                        </span>
+                        <span className="text-xs text-gray-500">
+                          {post.publishedAt?.toLocaleDateString(i18n.language === 'tr' ? 'tr-TR' : 'en-US')}
+                        </span>
+                      </div>
+                      <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-orange-600 transition-colors line-clamp-2">
+                        {i18n.language === 'tr' ? post.titleTR : post.titleEN}
+                      </h3>
+                      <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+                        {i18n.language === 'tr' ? post.excerptTR : post.excerptEN}
+                      </p>
+                      <span className="text-orange-600 text-sm font-medium">
+                        {t('blog.readMore')} →
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* WhatsApp Float Button */}
       <div className="fixed bottom-6 right-6 z-50">
@@ -387,7 +534,7 @@ const HomePage: React.FC = () => {
           href="https://wa.me/905xxxxxxxxx"
           target="_blank"
           rel="noopener noreferrer"
-          className="bg-green-500 text-white p-4 rounded-full shadow-lg hover:bg-green-600 transition-colors hover:scale-110 transform duration-200"
+          className="bg-green-500 text-white p-4 rounded-full shadow-lg hover:bg-green-600 transition-all duration-300 hover:scale-110 transform"
         >
           <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>

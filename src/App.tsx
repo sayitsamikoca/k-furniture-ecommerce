@@ -17,17 +17,119 @@ function App() {
           <main className="flex-grow">
             <Routes>
               <Route path="/" element={<HomePage />} />
-              <Route path="/product/:id" element={<ProductDetailPage />} />
+              <Route path="/product/:slug" element={<ProductDetailPage />} />
               <Route path="/cart" element={<CartPage />} />
-              <Route path="/furniture" element={<div className="min-h-screen flex items-center justify-center"><h2 className="text-2xl">Furniture Category Page</h2></div>} />
-              <Route path="/kitchen" element={<div className="min-h-screen flex items-center justify-center"><h2 className="text-2xl">Kitchen Category Page</h2></div>} />
-              <Route path="/custom-made" element={<div className="min-h-screen flex items-center justify-center"><h2 className="text-2xl">Custom Made Page</h2></div>} />
-              <Route path="/blog" element={<div className="min-h-screen flex items-center justify-center"><h2 className="text-2xl">Blog Page</h2></div>} />
-              <Route path="/about" element={<div className="min-h-screen flex items-center justify-center"><h2 className="text-2xl">About Page</h2></div>} />
-              <Route path="/contact" element={<div className="min-h-screen flex items-center justify-center"><h2 className="text-2xl">Contact Page</h2></div>} />
-              <Route path="/order-tracking" element={<div className="min-h-screen flex items-center justify-center"><h2 className="text-2xl">Order Tracking Page</h2></div>} />
-              <Route path="/favorites" element={<div className="min-h-screen flex items-center justify-center"><h2 className="text-2xl">Favorites Page</h2></div>} />
-              <Route path="/account" element={<div className="min-h-screen flex items-center justify-center"><h2 className="text-2xl">Account Page</h2></div>} />
+              
+              {/* Category Pages */}
+              <Route path="/furniture" element={
+                <div className="min-h-screen flex items-center justify-center">
+                  <h2 className="text-2xl font-bold text-gray-900">Mobilya Kategorisi</h2>
+                </div>
+              } />
+              <Route path="/kitchen" element={
+                <div className="min-h-screen flex items-center justify-center">
+                  <h2 className="text-2xl font-bold text-gray-900">Mutfak Kategorisi</h2>
+                </div>
+              } />
+              <Route path="/category/:slug" element={
+                <div className="min-h-screen flex items-center justify-center">
+                  <h2 className="text-2xl font-bold text-gray-900">Kategori Sayfası</h2>
+                </div>
+              } />
+              
+              {/* Other Pages */}
+              <Route path="/custom-made" element={
+                <div className="min-h-screen flex items-center justify-center">
+                  <h2 className="text-2xl font-bold text-gray-900">Özel Üretim Sayfası</h2>
+                </div>
+              } />
+              <Route path="/blog" element={
+                <div className="min-h-screen flex items-center justify-center">
+                  <h2 className="text-2xl font-bold text-gray-900">Blog Sayfası</h2>
+                </div>
+              } />
+              <Route path="/blog/:slug" element={
+                <div className="min-h-screen flex items-center justify-center">
+                  <h2 className="text-2xl font-bold text-gray-900">Blog Yazısı</h2>
+                </div>
+              } />
+              <Route path="/about" element={
+                <div className="min-h-screen flex items-center justify-center">
+                  <h2 className="text-2xl font-bold text-gray-900">Hakkımızda Sayfası</h2>
+                </div>
+              } />
+              <Route path="/contact" element={
+                <div className="min-h-screen flex items-center justify-center">
+                  <h2 className="text-2xl font-bold text-gray-900">İletişim Sayfası</h2>
+                </div>
+              } />
+              <Route path="/order-tracking" element={
+                <div className="min-h-screen flex items-center justify-center">
+                  <h2 className="text-2xl font-bold text-gray-900">Sipariş Takip Sayfası</h2>
+                </div>
+              } />
+              <Route path="/favorites" element={
+                <div className="min-h-screen flex items-center justify-center">
+                  <h2 className="text-2xl font-bold text-gray-900">Favoriler Sayfası</h2>
+                </div>
+              } />
+              <Route path="/account" element={
+                <div className="min-h-screen flex items-center justify-center">
+                  <h2 className="text-2xl font-bold text-gray-900">Hesabım Sayfası</h2>
+                </div>
+              } />
+              <Route path="/checkout" element={
+                <div className="min-h-screen flex items-center justify-center">
+                  <h2 className="text-2xl font-bold text-gray-900">Ödeme Sayfası</h2>
+                </div>
+              } />
+              <Route path="/custom-quote" element={
+                <div className="min-h-screen flex items-center justify-center">
+                  <h2 className="text-2xl font-bold text-gray-900">Özel Teklif Sayfası</h2>
+                </div>
+              } />
+              
+              {/* Admin Routes */}
+              <Route path="/admin" element={
+                <div className="min-h-screen flex items-center justify-center">
+                  <h2 className="text-2xl font-bold text-gray-900">Admin Paneli</h2>
+                </div>
+              } />
+              <Route path="/admin/*" element={
+                <div className="min-h-screen flex items-center justify-center">
+                  <h2 className="text-2xl font-bold text-gray-900">Admin Sayfası</h2>
+                </div>
+              } />
+              
+              {/* Policy Pages */}
+              <Route path="/privacy-policy" element={
+                <div className="min-h-screen flex items-center justify-center">
+                  <h2 className="text-2xl font-bold text-gray-900">Gizlilik Politikası</h2>
+                </div>
+              } />
+              <Route path="/terms" element={
+                <div className="min-h-screen flex items-center justify-center">
+                  <h2 className="text-2xl font-bold text-gray-900">Kullanım Şartları</h2>
+                </div>
+              } />
+              <Route path="/return-policy" element={
+                <div className="min-h-screen flex items-center justify-center">
+                  <h2 className="text-2xl font-bold text-gray-900">İade & Değişim</h2>
+                </div>
+              } />
+              
+              {/* 404 Page */}
+              <Route path="*" element={
+                <div className="min-h-screen flex items-center justify-center">
+                  <div className="text-center">
+                    <h2 className="text-2xl font-bold text-gray-900 mb-4">404 - Sayfa Bulunamadı</h2>
+                    <p className="text-gray-600 mb-4">Aradığınız sayfa mevcut değil.</p>
+                    <a href="/" className="text-orange-600 hover:text-orange-700 font-medium">
+                      Ana sayfaya dön
+                    </a>
+                  </div>
+                </div>
+              } />
             </Routes>
           </main>
           <Footer />

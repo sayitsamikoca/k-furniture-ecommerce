@@ -1,28 +1,39 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Heart, ShoppingCart, Star, Eye } from 'lucide-react';
+import { Heart, ShoppingCart, Star, Eye, Scale } from 'lucide-react';
 import { Product } from '../types';
 import { useApp } from '../contexts/AppContext';
 import { Link } from 'react-router-dom';
 
 interface ProductCardProps {
   product: Product;
+  className?: string;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, className = '' }) => {
   const { t, i18n } = useTranslation();
   const { state, dispatch } = useApp();
 
   const title = i18n.language === 'tr' ? product.titleTR : product.titleEN;
   const shortDescription = i18n.language === 'tr' ? product.shortDescriptionTR : product.shortDescriptionEN;
+  const slug = i18n.language === 'tr' ? product.slugTR : product.slugEN;
   const isFavorite = state.favorites.includes(product.id);
   const isInComparison = state.comparison.includes(product.id);
 
-  const handleAddToCart = () => {
-    dispatch({ type: 'ADD_TO_CART', payload: { product, quantity: 1 } });
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (product.stock > 0) {
+      dispatch({ 
+        type: 'ADD_TO_CART', 
+        payload: { product, quantity: 1 } 
+      });
+    }
   };
 
-  const handleToggleFavorite = () => {
+  const handleToggleFavorite = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (isFavorite) {
       dispatch({ type: 'REMOVE_FROM_FAVORITES', payload: product.id });
     } else {
@@ -30,7 +41,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     }
   };
 
-  const handleToggleComparison = () => {
+  const handleToggleComparison = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (isInComparison) {
       dispatch({ type: 'REMOVE_FROM_COMPARISON', payload: product.id });
     } else {
@@ -39,44 +52,60 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   };
 
   const formatPrice = (price: number) => {
+    const exchangeRates = { TRY: 1, USD: 0.034, EUR: 0.031 };
+    const convertedPrice = price * exchangeRates[state.currency];
+    
     return new Intl.NumberFormat(i18n.language === 'tr' ? 'tr-TR' : 'en-US', {
       style: 'currency',
-      currency: product.currency,
-      minimumFractionDigits: 0
-    }).format(price);
+      currency: state.currency,
+      minimumFractionDigits: state.currency === 'TRY' ? 0 : 2
+    }).format(convertedPrice);
   };
 
   const discountPercentage = product.discountPrice 
     ? Math.round(((product.price - product.discountPrice) / product.price) * 100)
     : 0;
 
+  const currentPrice = product.discountPrice || product.price;
+
   return (
-    <div className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 group overflow-hidden border border-gray-100">
+    <div className={`bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 group overflow-hidden border border-gray-100 ${className}`}>
       {/* Image Container */}
       <div className="relative overflow-hidden">
-        <Link to={`/product/${product.id}`}>
+        <Link to={`/product/${slug}`}>
           <img
-            src={product.images[0]}
-            alt={title}
+            src={product.images[0]?.url}
+            alt={product.images[0]?.altTR || title}
             className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+            loading="lazy"
           />
         </Link>
         
         {/* Badges */}
         <div className="absolute top-3 left-3 flex flex-col space-y-1">
+          {product.isNew && (
+            <span className="bg-green-600 text-white text-xs px-2 py-1 rounded-full font-medium">
+              {t('product.newArrival')}
+            </span>
+          )}
           {product.isCustomMade && (
-            <span className="bg-purple-600 text-white text-xs px-2 py-1 rounded-full">
+            <span className="bg-purple-600 text-white text-xs px-2 py-1 rounded-full font-medium">
               {t('product.customMade')}
             </span>
           )}
           {discountPercentage > 0 && (
-            <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+            <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-medium">
               -{discountPercentage}%
             </span>
           )}
           {product.stock === 0 && (
-            <span className="bg-gray-500 text-white text-xs px-2 py-1 rounded-full">
+            <span className="bg-gray-500 text-white text-xs px-2 py-1 rounded-full font-medium">
               {t('product.outOfStock')}
+            </span>
+          )}
+          {product.isFeatured && (
+            <span className="bg-orange-600 text-white text-xs px-2 py-1 rounded-full font-medium">
+              {t('product.featured')}
             </span>
           )}
         </div>
@@ -90,12 +119,27 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 ? 'bg-red-500 text-white' 
                 : 'bg-white text-gray-600 hover:bg-red-500 hover:text-white'
             }`}
+            title={isFavorite ? t('product.removeFromFavorites') : t('product.addToFavorites')}
           >
             <Heart className="w-4 h-4" />
           </button>
+          
+          <button
+            onClick={handleToggleComparison}
+            className={`p-2 rounded-full shadow-lg transition-colors ${
+              isInComparison
+                ? 'bg-blue-500 text-white'
+                : 'bg-white text-gray-600 hover:bg-blue-500 hover:text-white'
+            }`}
+            title={t('product.compare')}
+          >
+            <Scale className="w-4 h-4" />
+          </button>
+          
           <Link 
-            to={`/product/${product.id}`}
+            to={`/product/${slug}`}
             className="p-2 bg-white text-gray-600 rounded-full shadow-lg hover:bg-orange-500 hover:text-white transition-colors"
+            title={t('common.view')}
           >
             <Eye className="w-4 h-4" />
           </Link>
@@ -120,7 +164,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </div>
 
         {/* Title */}
-        <Link to={`/product/${product.id}`}>
+        <Link to={`/product/${slug}`}>
           <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 hover:text-orange-600 transition-colors">
             {title}
           </h3>
@@ -148,10 +192,18 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                                    color === 'Doğal' ? '#d4a574' :
                                    color === 'Koyu Ceviz' ? '#8b4513' :
                                    color === 'Açık Meşe' ? '#daa520' :
+                                   color === 'Antrasit' ? '#374151' :
+                                   color === 'Ahşap Desenli' ? '#92400e' :
+                                   color === 'Kahverengi' ? '#92400e' :
+                                   color === 'Gümüş' ? '#9ca3af' :
                                    '#94a3b8'
                 }}
+                title={color}
               />
             ))}
+            {product.colors.length > 3 && (
+              <span className="text-xs text-gray-400">+{product.colors.length - 3}</span>
+            )}
           </div>
         </div>
 
@@ -177,32 +229,42 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           {/* Delivery Time */}
           {product.deliveryTime && (
             <span className="text-sm text-gray-500">
-              {product.deliveryTime} {t('days')}
+              {product.deliveryTime} {t('time.days')}
             </span>
           )}
         </div>
 
+        {/* Stock Status */}
+        {product.stock <= 5 && product.stock > 0 && (
+          <div className="mb-3">
+            <span className="text-sm text-orange-600 font-medium">
+              {i18n.language === 'tr' 
+                ? `Son ${product.stock} adet!` 
+                : `Only ${product.stock} left!`
+              }
+            </span>
+          </div>
+        )}
+
         {/* Action Buttons */}
         <div className="flex space-x-2">
-          <button
-            onClick={handleAddToCart}
-            disabled={product.stock === 0}
-            className="flex-1 bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center space-x-2 text-sm font-medium"
-          >
-            <ShoppingCart className="w-4 h-4" />
-            <span>{product.stock === 0 ? t('product.outOfStock') : t('cta.addToCart')}</span>
-          </button>
-          
-          <button
-            onClick={handleToggleComparison}
-            className={`px-3 py-2 rounded-lg border transition-colors text-sm ${
-              isInComparison
-                ? 'border-orange-600 text-orange-600 bg-orange-50'
-                : 'border-gray-300 text-gray-600 hover:border-orange-600 hover:text-orange-600'
-            }`}
-          >
-            {t('product.compare')}
-          </button>
+          {product.isCustomMade ? (
+            <Link
+              to={`/custom-quote?product=${product.id}`}
+              className="flex-1 bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium text-center"
+            >
+              {t('cta.getQuote')}
+            </Link>
+          ) : (
+            <button
+              onClick={handleAddToCart}
+              disabled={product.stock === 0}
+              className="flex-1 bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center space-x-2 text-sm font-medium"
+            >
+              <ShoppingCart className="w-4 h-4" />
+              <span>{product.stock === 0 ? t('product.outOfStock') : t('cta.addToCart')}</span>
+            </button>
+          )}
         </div>
       </div>
     </div>
